@@ -1,0 +1,4 @@
+in .json file "start" command is used to start the server during production
+and "dev" command is used to start the server during development
+==> npm start
+==> npm run dev
