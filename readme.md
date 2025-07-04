@@ -169,7 +169,7 @@ Example: `models/Product.js` defines the Product schema, `controllers/productCon
 
 Define Mongoose schemas for main entities:
 
-- **User:** Fields might include `name`, `email`, `password` (hashed), and `isAdmin` (Boolean). Add a method to the model to verify password (with bcrypt) and to generate JWT.
+- **User:** Fields might include `userName`, `email`, `password` (hashed), and `role` (Boolean). Add a method to the model to verify password (with bcrypt) and to generate JWT.
 - **Product:** Fields include `name`, `price`, `brand`, `category`, `countInStock`, `image` URL, and `description`. Store necessary details for listing and cart.
 - **Order:** Fields include a reference to the user (`user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }`), an array of items (with `product`, `qty`, `price`), shipping address, `totalPrice`, order `status`, and timestamps for created/paid/shipped dates.
 
