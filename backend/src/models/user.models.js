@@ -21,8 +21,9 @@ const userSchema = new mongoose.Schema(
       minlength: [5, "Email must be at least 5 characters"],
       maxlength: [40, "Email must be at most 40 characters"],
       validate: {
-        validator: validator.isEmail,
-        message: "Please enter a valid email address",
+        validator: function (email) {
+          return validator.isEmail(email);
+        },
       },
     },
     password: {
@@ -38,24 +39,6 @@ const userSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-    toJSON: {
-      transform: {
-        function(doc, ret) {
-          delete ret.password; // Remove password from the response
-          delete ret.__v; // Remove version key from the response
-          return ret; // Return the modified object
-        },
-      },
-    },
-    toObject: {
-      transform: {
-        function(doc, ret) {
-          delete ret.password; // Remove password from the response
-          delete ret.__v; // Remove version key from the response
-          return ret; // Return the modified object
-        },
-      },
-    },
   }
 );
 
