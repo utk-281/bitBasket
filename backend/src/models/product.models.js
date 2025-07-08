@@ -14,7 +14,6 @@ const productSchema = new mongoose.Schema(
       trim: true,
       minlength: [3, "Title must be at least 3 characters"],
       maxlength: [100, "Title can't exceed 100 characters"],
-      index: true,
     },
     description: {
       type: String,
@@ -27,7 +26,6 @@ const productSchema = new mongoose.Schema(
       type: String,
       trim: true,
       lowercase: true,
-      index: true,
     },
     brand: {
       type: String,

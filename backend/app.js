@@ -2,6 +2,14 @@ require("dotenv").config();
 const express = require("express");
 const error = require("./src/middlewares/error.middlewares");
 const cookieParser = require("cookie-parser");
+const path = require("path");
+const { seedAdmin } = require("./seedData/adminSeed");
+
+console.log();
+
+if (process.argv[2] === "seed") {
+  seedAdmin();
+}
 
 //& ─── routes file import ────────────────────────────────────────────────────────────────
 const userRoutes = require("./src/routes/user/user.routes");
