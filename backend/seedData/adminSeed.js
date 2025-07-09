@@ -10,7 +10,7 @@ const seedAdmin = expressAsyncHandler(async (req, res) => {
       password: "admin123",
       role: "admin",
     };
-    const newAdmin = await userCollection.create(adminDetails);
+    await userCollection.create(adminDetails);
     console.log("admin seeded successfully");
   } else {
     console.log("Admin already exists, skipping seed.");

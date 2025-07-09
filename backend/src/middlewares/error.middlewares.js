@@ -17,6 +17,12 @@ const error = (err, req, res, next) => {
     err.statusCode = 409; // conflict
   }
 
+  //& ─── CastError ────────────────────────────────────────────────────────────────
+  if (err.name === "CastError") {
+    err.message = "Invalid ID format, please check the ID you provided";
+    err.statusCode = 400;
+  }
+
   err.message = err.message || "Internal Server Error";
   err.statusCode = err.statusCode || 500;
 

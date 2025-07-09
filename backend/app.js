@@ -5,15 +5,20 @@ const cookieParser = require("cookie-parser");
 const path = require("path");
 const { seedAdmin } = require("./seedData/adminSeed");
 
-console.log();
+console.log(process.argv);
 
+//& ─── admin seed ────────────────────────────────────────────────────────────────
+// nodemon server seed
 if (process.argv[2] === "seed") {
   seedAdmin();
 }
 
 //& ─── routes file import ────────────────────────────────────────────────────────────────
 const userRoutes = require("./src/routes/user/user.routes");
+const productRoutes = require("./src/routes/admin/product.routes");
+const { authenticate, authorization } = require("./src/middlewares/auth.middlewares");
 
+//& ─── express app initialization ─────────────────────────────────────────────────────────
 const app = express();
 
 //& ─── middleware ────────────────────────────────────────────────────────────────────────
@@ -21,8 +26,9 @@ app.use(express.json()); // Parse JSON bodies
 app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
 app.use(cookieParser());
 
-//& ─── routes ─────────────────────────────────────────────────────────────────────────────
-app.use("/api/users", userRoutes); // User routes
+//& ─── api routes ─────────────────────────────────────────────────────────────────────────────
+app.use("/api/v1/users", userRoutes); // User routes`
+app.use("/api/v1/admin/products", authenticate, authorization, productRoutes); // Product routes
 
 //& ─── error middleware ────────────────────────────────────────────────────────────────────
 app.use(error);
