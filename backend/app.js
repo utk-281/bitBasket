@@ -5,7 +5,7 @@ const cookieParser = require("cookie-parser");
 const path = require("path");
 const { seedAdmin } = require("./seedData/adminSeed");
 
-console.log(process.argv);
+// console.log(process.argv);
 
 //& ─── admin seed ────────────────────────────────────────────────────────────────
 // nodemon server seed

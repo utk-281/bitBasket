@@ -7,7 +7,7 @@ const {
   deleteProduct,
   uploadImage,
 } = require("../../controllers/admin/product.controller");
-const upload = require("../../config/multer.config");
+const upload = require("../../middlewares/multer.middleware");
 
 const router = Router();
 

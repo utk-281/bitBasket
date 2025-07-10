@@ -2,9 +2,17 @@ const productCollection = require("../../models/product.models");
 const expressAsyncHandler = require("express-async-handler");
 const ApiResponse = require("../../utils/ApiResponse.utils");
 const ErrorHandler = require("../../utils/ErrorHandler.utils");
+const uploadImageOnCloudinary = require("../../utils/cloudinary.utils");
 
 const uploadImage = expressAsyncHandler(async (req, res, next) => {
-  console.log(req.file);
+  console.log(req.file); // for uploading single image
+  // console.log(req.files); // for uploading multiple images
+
+  let b64 = Buffer.from(req.file.buffer).toString("base64");
+  let url = "data:" + req.file.mimetype + ";base64," + b64;
+  // console.log(url);
+  let uploaded = await uploadImageOnCloudinary(url);
+  console.log(uploaded);
 });
 
 //& ─── add product ────────────────────────────────────────────────────────────────
@@ -74,3 +82,38 @@ module.exports = {
   updateProduct,
   deleteProduct,
 };
+
+/*
+ req.file = {
+  fieldname: 'image',
+  originalname: 'Screenshot (20).png',
+  encoding: '7bit',
+  mimetype: 'image/png',
+  buffer: <Buffer 89 50 4e 47 0d 0a 1a 0a 00 00 00 0d 49 48 44 52 00 00 0a 00 00 00 05 a0 08 06 00 00 00 92 00 1a df 00 00 00 01 73 52 47 42 00 ae ce 1c e9 00 00 00 04 ... 7228052 more bytes>,
+  size: 7228102
+}
+
+let uploaded = {
+  asset_id: 'ee3812ff49423cb71caeabdccd293957',
+  public_id: 'eKart/q1yafvbq3d5xx7jduero',
+  version: 1752128313,
+  version_id: '12bc2e47715af178078cbc978b0907eb',
+  signature: 'd5d9f7ca75dc5dc171bc3589c39713149ea5a2e6',
+  width: 2560,
+  height: 1440,
+  format: 'png',
+  resource_type: 'image',
+  created_at: '2025-07-10T06:18:33Z',
+  tags: [],
+  bytes: 7228102,
+  type: 'upload',
+  etag: '9bec15763c07a75c3c42db725f390213',
+  placeholder: false,
+  url: 'http://res.cloudinary.com/dynuatcqe/image/upload/v1752128313/eKart/q1yafvbq3d5xx7jduero.png',
+  secure_url: 'https://res.cloudinary.com/dynuatcqe/image/upload/v1752128313/eKart/q1yafvbq3d5xx7jduero.png',
+  asset_folder: 'eKart',
+  display_name: 'q1yafvbq3d5xx7jduero',
+  api_key: '616978421991279'
+}
+
+ */
