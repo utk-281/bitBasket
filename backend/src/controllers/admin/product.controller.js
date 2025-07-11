@@ -2,8 +2,13 @@ const productCollection = require("../../models/product.models");
 const expressAsyncHandler = require("express-async-handler");
 const ApiResponse = require("../../utils/ApiResponse.utils");
 const ErrorHandler = require("../../utils/ErrorHandler.utils");
-const uploadImageOnCloudinary = require("../../utils/cloudinary.utils");
+const {
+  uploadImageOnCloudinary,
+  getPublicId,
+  deleteImageFromCloudinary,
+} = require("../../utils/cloudinary.utils");
 
+//& ─── upload image ────────────────────────────────────────────────────────────────
 const uploadImage = expressAsyncHandler(async (req, res, next) => {
   console.log(req.file); // for uploading single image
   // console.log(req.files); // for uploading multiple images
@@ -12,7 +17,23 @@ const uploadImage = expressAsyncHandler(async (req, res, next) => {
   let url = "data:" + req.file.mimetype + ";base64," + b64;
   // console.log(url);
   let uploaded = await uploadImageOnCloudinary(url);
-  console.log(uploaded);
+  // console.log(uploaded);
+  new ApiResponse(
+    200,
+    true,
+    "Image uploaded successfully",
+    uploaded.secure_url,
+    uploaded.asset_id
+  ).send(res);
+});
+
+//& ─── Delete image ────────────────────────────────────────────────────────────────
+const deleteImage = expressAsyncHandler(async (req, res, next) => {
+  let url = req.body.url;
+  let public_id = getPublicId(url);
+  let deletedImage = await deleteImageFromCloudinary(public_id);
+  if (!deletedImage) return next(new ErrorHandler("Image not found", 404));
+  new ApiResponse(200, true, "Image deleted successfully").send(res);
 });
 
 //& ─── add product ────────────────────────────────────────────────────────────────
@@ -81,6 +102,7 @@ module.exports = {
   getProduct,
   updateProduct,
   deleteProduct,
+  deleteImage,
 };
 
 /*
@@ -117,3 +139,5 @@ let uploaded = {
 }
 
  */
+
+// https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.pexels.com%2Fsearch%2Fbeautiful%2F&psig=AOvVaw2uzv905wKGZA2BX-_X0Vbd&ust=1752297822185000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCLjb45uItI4DFQAAAAAdAAAAABAE

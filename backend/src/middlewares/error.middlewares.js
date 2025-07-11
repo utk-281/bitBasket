@@ -23,6 +23,12 @@ const error = (err, req, res, next) => {
     err.statusCode = 400;
   }
 
+  //& ─── JsonWebTokenError ────────────────────────────────────────────────────────────────
+  if (err.name === "JsonWebTokenError") {
+    err.message = "Invalid token, please login again";
+    err.statusCode = 401;
+  }
+
   err.message = err.message || "Internal Server Error";
   err.statusCode = err.statusCode || 500;
 
