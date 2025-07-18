@@ -16,7 +16,7 @@ if (process.argv[2] === "seed") {
 //& ─── routes file import ────────────────────────────────────────────────────────────────
 const userRoutes = require("./src/routes/user/user.routes");
 const productRoutes = require("./src/routes/admin/product.routes");
-const shopCartRoutes = require("./src/routes/shop/shop.routes");
+const shopCartRoutes = require("./src/routes/shop/cart.routes");
 //& ─── middlewares import ────────────────────────────────────────────────────────────────
 const { authenticate, authorization } = require("./src/middlewares/auth.middlewares");
 

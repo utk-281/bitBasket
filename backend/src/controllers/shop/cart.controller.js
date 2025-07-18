@@ -1,6 +1,6 @@
 const expressAsyncHandler = require("express-async-handler"); // Imports a utility to wrap async express route handlers, catching errors and passing them to the error middleware.
-const cartCollection = require("../../models/cart.model"); // Imports the Mongoose model for the cart.
-const productCollection = require("../../models/product.model"); // Imports the Mongoose model for products.
+const cartCollection = require("../../models/cart.models"); // Imports the Mongoose model for the cart.
+const productCollection = require("../../models/product.models"); // Imports the Mongoose model for products.
 const ApiResponse = require("../../utils/ApiResponse.utils"); // Imports a custom utility for consistent API response formatting.
 const ErrorHandler = require("../../utils/ErrorHandler.utils"); // Imports a custom utility for handling errors and sending appropriate HTTP responses.
 
