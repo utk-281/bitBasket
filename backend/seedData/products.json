@@ -1,0 +1,222 @@
+[
+  {
+    "image": "http://example.com/img1.jpg",
+    "title": "Wireless Mouse",
+    "description": "Ergonomic wireless mouse for all-day comfort.",
+    "category": "electronics",
+    "brand": "logitech",
+    "price": 29.99,
+    "salePrice": 24.99,
+    "totalStock": 100,
+    "averageReview": 4.5
+  },
+  {
+    "image": "http://example.com/img2.jpg",
+    "title": "Bluetooth Headphones",
+    "description": "Over-ear noise cancelling headphones with deep bass.",
+    "category": "electronics",
+    "brand": "sony",
+    "price": 99.99,
+    "salePrice": 89.99,
+    "totalStock": 50,
+    "averageReview": 4.7
+  },
+  {
+    "image": "http://example.com/img3.jpg",
+    "title": "Yoga Mat",
+    "description": "High-density yoga mat for indoor and outdoor use.",
+    "category": "fitness",
+    "brand": "reebok",
+    "price": 19.99,
+    "salePrice": 15.99,
+    "totalStock": 200,
+    "averageReview": 4.3
+  },
+  {
+    "image": "http://example.com/img4.jpg",
+    "title": "Running Shoes",
+    "description": "Breathable and lightweight running shoes for men.",
+    "category": "footwear",
+    "brand": "nike",
+    "price": 59.99,
+    "salePrice": 49.99,
+    "totalStock": 80,
+    "averageReview": 4.2
+  },
+  {
+    "image": "http://example.com/img5.jpg",
+    "title": "Leather Wallet",
+    "description": "Premium genuine leather wallet with multiple slots.",
+    "category": "accessories",
+    "brand": "fossil",
+    "price": 39.99,
+    "salePrice": 29.99,
+    "totalStock": 120,
+    "averageReview": 4.6
+  },
+  {
+    "image": "http://example.com/img6.jpg",
+    "title": "Smart Watch",
+    "description": "Feature-rich smart watch with health tracking.",
+    "category": "electronics",
+    "brand": "samsung",
+    "price": 149.99,
+    "salePrice": 129.99,
+    "totalStock": 70,
+    "averageReview": 4.8
+  },
+  {
+    "image": "http://example.com/img7.jpg",
+    "title": "Gaming Keyboard",
+    "description": "Mechanical keyboard with RGB lighting.",
+    "category": "electronics",
+    "brand": "corsair",
+    "price": 89.99,
+    "salePrice": 79.99,
+    "totalStock": 60,
+    "averageReview": 4.4
+  },
+  {
+    "image": "http://example.com/img8.jpg",
+    "title": "Travel Backpack",
+    "description": "Durable backpack with laptop compartment.",
+    "category": "accessories",
+    "brand": "north face",
+    "price": 69.99,
+    "salePrice": 59.99,
+    "totalStock": 150,
+    "averageReview": 4.5
+  },
+  {
+    "image": "http://example.com/img9.jpg",
+    "title": "Graphic T-shirt",
+    "description": "100% cotton T-shirt with cool graphics.",
+    "category": "clothing",
+    "brand": "h&m",
+    "price": 14.99,
+    "salePrice": 12.99,
+    "totalStock": 300,
+    "averageReview": 4.1
+  },
+  {
+    "image": "http://example.com/img10.jpg",
+    "title": "Sunglasses",
+    "description": "UV-protective stylish sunglasses for summer.",
+    "category": "accessories",
+    "brand": "ray-ban",
+    "price": 129.99,
+    "salePrice": 109.99,
+    "totalStock": 90,
+    "averageReview": 4.6
+  },
+  {
+    "image": "http://example.com/img11.jpg",
+    "title": "Laptop Stand",
+    "description": "Adjustable laptop stand for better posture.",
+    "category": "electronics",
+    "brand": "amazon basics",
+    "price": 25.99,
+    "salePrice": 22.99,
+    "totalStock": 180,
+    "averageReview": 4.4
+  },
+  {
+    "image": "http://example.com/img12.jpg",
+    "title": "Water Bottle",
+    "description": "Insulated stainless steel water bottle.",
+    "category": "fitness",
+    "brand": "hydro flask",
+    "price": 34.99,
+    "salePrice": 29.99,
+    "totalStock": 220,
+    "averageReview": 4.7
+  },
+  {
+    "image": "http://example.com/img13.jpg",
+    "title": "Formal Shirt",
+    "description": "Slim-fit formal shirt for men.",
+    "category": "clothing",
+    "brand": "zara",
+    "price": 44.99,
+    "salePrice": 39.99,
+    "totalStock": 130,
+    "averageReview": 4.2
+  },
+  {
+    "image": "http://example.com/img14.jpg",
+    "title": "Portable Charger",
+    "description": "High-capacity power bank with fast charging.",
+    "category": "electronics",
+    "brand": "anker",
+    "price": 49.99,
+    "salePrice": 39.99,
+    "totalStock": 100,
+    "averageReview": 4.8
+  },
+  {
+    "image": "http://example.com/img15.jpg",
+    "title": "Bluetooth Speaker",
+    "description": "Portable speaker with excellent sound quality.",
+    "category": "electronics",
+    "brand": "jbl",
+    "price": 59.99,
+    "salePrice": 49.99,
+    "totalStock": 140,
+    "averageReview": 4.6
+  },
+  {
+    "image": "http://example.com/img16.jpg",
+    "title": "Cooking Pan Set",
+    "description": "Non-stick cookware set for all kitchen needs.",
+    "category": "home & kitchen",
+    "brand": "t-fal",
+    "price": 79.99,
+    "salePrice": 69.99,
+    "totalStock": 60,
+    "averageReview": 4.3
+  },
+  {
+    "image": "http://example.com/img17.jpg",
+    "title": "Desk Lamp",
+    "description": "LED desk lamp with touch control.",
+    "category": "home & kitchen",
+    "brand": "philips",
+    "price": 29.99,
+    "salePrice": 24.99,
+    "totalStock": 110,
+    "averageReview": 4.4
+  },
+  {
+    "image": "http://example.com/img18.jpg",
+    "title": "Sneakers",
+    "description": "Stylish and comfortable sneakers for everyday use.",
+    "category": "footwear",
+    "brand": "adidas",
+    "price": 69.99,
+    "salePrice": 59.99,
+    "totalStock": 90,
+    "averageReview": 4.5
+  },
+  {
+    "image": "http://example.com/img19.jpg",
+    "title": "Notebook",
+    "description": "Hardcover ruled notebook for school or office.",
+    "category": "stationery",
+    "brand": "moleskine",
+    "price": 19.99,
+    "salePrice": 17.99,
+    "totalStock": 250,
+    "averageReview": 4.8
+  },
+  {
+    "image": "http://example.com/img20.jpg",
+    "title": "Desk Organizer",
+    "description": "Multifunctional desk organizer with drawers.",
+    "category": "home & kitchen",
+    "brand": "ikea",
+    "price": 24.99,
+    "salePrice": 19.99,
+    "totalStock": 160,
+    "averageReview": 4.5
+  }
+]

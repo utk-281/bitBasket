@@ -17,6 +17,8 @@ if (process.argv[2] === "seed") {
 const userRoutes = require("./src/routes/user/user.routes");
 const productRoutes = require("./src/routes/admin/product.routes");
 const shopCartRoutes = require("./src/routes/shop/cart.routes");
+const shopProductRoutes = require("./src/routes/shop/product.routes");
+
 //& ─── middlewares import ────────────────────────────────────────────────────────────────
 const { authenticate, authorization } = require("./src/middlewares/auth.middlewares");
 
@@ -32,6 +34,7 @@ app.use(cookieParser());
 app.use("/api/v1/users", userRoutes); // User routes`
 app.use("/api/v1/admin/products", authenticate, authorization, productRoutes); // Product routes
 app.use("/api/v1/shop/cart", authenticate, shopCartRoutes); // Shop cart routes
+app.use("/api/v1/shop/products", shopProductRoutes); // Shop product routes
 
 //& ─── error middleware ────────────────────────────────────────────────────────────────────
 app.use(error);

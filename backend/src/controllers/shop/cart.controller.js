@@ -4,7 +4,7 @@ const productCollection = require("../../models/product.models"); // Imports the
 const ApiResponse = require("../../utils/ApiResponse.utils"); // Imports a custom utility for consistent API response formatting.
 const ErrorHandler = require("../../utils/ErrorHandler.utils"); // Imports a custom utility for handling errors and sending appropriate HTTP responses.
 
-// ─── Add To Cart ───────────────────────────────────────────────────────────────
+//& ─── Add To Cart ───────────────────────────────────────────────────────────────
 /**
  * @desc Add a product to the user's cart or increment its quantity if already present.
  * @route POST /api/v1/cart/add
@@ -42,10 +42,10 @@ const addToCart = expressAsyncHandler(async (req, res, next) => {
   // Save the updated cart to the database.
   await cart.save();
   // Send a success API response with the updated cart data.
-  new ApiResponse(true, "Product added to cart successfully", cart, 200).send(res);
+  new ApiResponse(201, true, "Product added successfully").send(res);
 });
 
-// ─── Fetch Cart Items ──────────────────────────────────────────────────────────
+//& ─── Fetch Cart Items ──────────────────────────────────────────────────────────
 /**
  * @desc Fetch all items in the user's cart.
  * @route GET /api/v1/cart
@@ -59,7 +59,7 @@ const fetchCartItems = expressAsyncHandler(async (req, res, next) => {
   // `select` specifies which fields from the product document to include (`image`, `title`, `price`, `salePrice`).
   const cart = await cartCollection.findOne({ userId }).populate({
     path: "items.productId",
-    select: "image title price salePrice",
+    select: "image title price salePrice brand",
   });
 
   // If no cart is found for the user, send a 404 error.
@@ -96,7 +96,7 @@ const fetchCartItems = expressAsyncHandler(async (req, res, next) => {
   const message =
     populateCartItems.length === 0 ? "Cart is empty" : "Cart items fetched successfully";
   // Send a success API response with the formatted cart data.
-  new ApiResponse(true, message, cartItems, 200).send(res);
+  new ApiResponse(200, true, message, cartItems).send(res);
 });
 
 // ─── Update Cart Items ─────────────────────────────────────────────────────────
@@ -166,7 +166,7 @@ const updateCartItems = expressAsyncHandler(async (req, res, next) => {
   };
 
   // Send a success API response with the updated cart data.
-  new ApiResponse(true, "Cart updated successfully", cartItems, 200).send(res);
+  new ApiResponse(200, true, "Product quantity updated successfully", cartItems).send(res);
 });
 
 // ─── Delete Cart Item ──────────────────────────────────────────────────────────

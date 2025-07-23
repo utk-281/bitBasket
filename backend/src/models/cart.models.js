@@ -19,6 +19,7 @@ const CartSchema = new mongoose.Schema(
           required: true,
           min: 1,
         },
+        _id: false, // this will not create _id field in nested objects.
       },
     ],
   },
@@ -28,3 +29,11 @@ const CartSchema = new mongoose.Schema(
 );
 
 module.exports = mongoose.model("Cart", CartSchema);
+
+let items = {
+  userId: 123,
+  items: [
+    { productId: 325, quantity: 1 },
+    { productId: 344, quantity: 2 },
+  ],
+};
