@@ -18,6 +18,8 @@ const userRoutes = require("./src/routes/user/user.routes");
 const productRoutes = require("./src/routes/admin/product.routes");
 const shopCartRoutes = require("./src/routes/shop/cart.routes");
 const shopProductRoutes = require("./src/routes/shop/product.routes");
+const shopAddressRoutes = require("./src/routes/shop/address.routes");
+const shopOrderRoutes = require("./src/routes/shop/order.routes");
 
 //& ─── middlewares import ────────────────────────────────────────────────────────────────
 const { authenticate, authorization } = require("./src/middlewares/auth.middlewares");
@@ -35,6 +37,8 @@ app.use("/api/v1/users", userRoutes); // User routes`
 app.use("/api/v1/admin/products", authenticate, authorization, productRoutes); // Product routes
 app.use("/api/v1/shop/cart", authenticate, shopCartRoutes); // Shop cart routes
 app.use("/api/v1/shop/products", shopProductRoutes); // Shop product routes
+app.use("/api/v1/shop/address", authenticate, shopAddressRoutes); // Shop address routes
+app.use("/api/v1/shop/orders", authenticate, shopOrderRoutes); // Shop address routes
 
 //& ─── error middleware ────────────────────────────────────────────────────────────────────
 app.use(error);
