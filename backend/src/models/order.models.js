@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 
-const orderSchema = new mongoose.Schema(
+const { Schema } = mongoose;
+
+const OrderSchema = new Schema(
   {
     userId: {
       type: mongoose.Schema.Types.ObjectId,
@@ -12,18 +14,6 @@ const orderSchema = new mongoose.Schema(
       ref: "Cart",
       required: true,
     },
-    addressInfo: {
-      addressId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Address",
-        required: true,
-      },
-      address: { type: String, required: true },
-      city: { type: String, required: true },
-      pincode: { type: String, required: true },
-      phone: { type: String, required: true },
-      notes: { type: String },
-    },
     cartItems: [
       {
         productId: {
@@ -34,13 +24,41 @@ const orderSchema = new mongoose.Schema(
         title: {
           type: String,
           required: true,
+          trim: true,
         },
-        price: { type: Number, required: true },
-        brand: { type: String, required: true },
-        quantity: { type: Number, required: true },
-        image: { type: String, required: true },
+        image: {
+          type: String,
+          required: true,
+        },
+        price: {
+          type: Number,
+          required: true,
+          min: 0,
+        },
+        quantity: {
+          type: Number,
+          required: true,
+          min: 1,
+        },
       },
     ],
+    addressInfo: {
+      addressId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Address",
+        required: true,
+      },
+      address: { type: String, required: true },
+      city: { type: String, required: true },
+      pincode: { type: String, required: true },
+      phone: { type: String, required: true },
+      notes: { type: String, default: "" },
+    },
+    orderStatus: {
+      type: String,
+      enum: ["pending", "processing", "placed", "shipped", "delivered", "cancelled"],
+      default: "Pending",
+    },
     paymentMethod: {
       type: String,
       enum: ["cod", "online"],
@@ -48,30 +66,20 @@ const orderSchema = new mongoose.Schema(
     },
     paymentStatus: {
       type: String,
-      enum: ["pending", "paid", "failed"],
-      default: "pending",
-      required: true,
-    },
-    orderStatus: {
-      type: String,
-      enum: ["pending", "processing", "shipped", "placed", "delivered"],
-      default: "pending",
-      required: true,
+      enum: ["pending", "paid", "failed", "refunded"],
+      default: "Pending",
     },
     totalAmount: {
       type: Number,
       required: true,
+      min: 0,
     },
-    paymentId: {
-      type: String,
-      default: null,
-    },
-    payerId: {
-      type: String,
-      default: null,
-    },
+    paymentId: { type: String, default: null },
+    payerId: { type: String, default: null },
   },
-  { timestamps: true }
+  {
+    timestamps: true, // adds createdAt and updatedAt
+  }
 );
 
-module.exports = mongoose.model("Order", orderSchema);
+module.exports = mongoose.model("Order", OrderSchema);
