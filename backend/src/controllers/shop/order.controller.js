@@ -3,11 +3,12 @@ const userCollection = require("../../models/user.models");
 const productCollection = require("../../models/product.models");
 const addressCollection = require("../../models/address.models");
 const cartCollection = require("../../models/cart.models");
-const paypal = require("../../config/paypal.config");
 const expressAsyncHandler = require("express-async-handler");
 const ErrorHandler = require("../../utils/ErrorHandler.utils");
+const paypal = require("../../config/paypal.config");
+const ApiResponse = require("../../utils/ApiResponse.utils");
 
-// Create Order Controller - Handles both COD and PayPal online payment orders
+//! Create Order Controller - Handles both COD and PayPal online payment orders
 const createOrder = expressAsyncHandler(async (req, res, next) => {
   // ✅ Step 1: Get the logged-in user's ID from the request (after auth middleware has added req.user)
   const userId = req.user._id;
@@ -16,7 +17,7 @@ const createOrder = expressAsyncHandler(async (req, res, next) => {
   const { cartId, addressId, paymentMethod } = req.body;
 
   // ✅ Step 3: Validate if all required inputs are present
-  if (!cartId || !addressId || !paymentMethod) {
+  if (!cartId || !addressId) {
     return next(new ErrorHandler("Missing required fields", 400)); // Throw error if any field is missing
   }
 
@@ -51,7 +52,7 @@ const createOrder = expressAsyncHandler(async (req, res, next) => {
     }
 
     // Add the product price * quantity to the total amount
-    totalAmount += product.price * item.quantity;
+    totalAmount += product.salePrice * item.quantity;
 
     // Prepare the cart item object to store in the order
     cartItems.push({
@@ -73,102 +74,123 @@ const createOrder = expressAsyncHandler(async (req, res, next) => {
     notes: address.notes || "", // Optional notes like "leave at gate"
   };
 
-  // ✅ Step 11: Handle Online Payment using PayPal
-  if (paymentMethod === "Online") {
-    // Step 11.1: Create a payment request JSON as required by PayPal API
-    const create_payment_json = {
-      intent: "sale", // "sale" means PayPal will charge immediately
-      payer: { payment_method: "paypal" }, // Payment method used: PayPal
+  if (paymentMethod == "online") {
+    //! 2) create create_payment_json
+    let create_payment_json = {
+      intent: "sale", //! sale ==> funds will be transferred immediately
+      payer: { payment_method: "paypal" },
       redirect_urls: {
-        return_url: `http://localhost:5173/shop/paypal-return`, // On payment success, redirect here
-        cancel_url: `http://localhost:5173/shop/paypal-cancel`, // On payment cancel, redirect here
+        return_url: "http://localhost:9000/api/v1/shop/orders/capture-payment",
+        cancel_url: "http://localhost:5713/success=flase",
       },
       transactions: [
         {
-          // Send the list of cart items to PayPal
-          item_list: {
+          items_list: {
             items: cartItems.map((item) => ({
-              name: item.title, // Product title
-              sku: item.productId.toString(), // Product ID as Stock Keeping Unit
-              price: item.price.toFixed(2), // Price (2 decimal places)
-              currency: "USD", // Currency used
-              quantity: item.quantity, // Quantity purchased
+              name: item.title,
+              sku: item.productId, // stock keeping unit (UNIQUE ID)
+              price: item.price.toFixed(2),
+              currency: "USD",
+              quantity: item.quantity,
             })),
           },
           amount: {
-            currency: "USD", // Total amount currency
-            total: totalAmount.toFixed(2), // Total order value
+            total: totalAmount.toFixed(2),
+            currency: "USD",
           },
-          description: "Order payment", // Custom description
+          description: "Payment Order",
         },
       ],
     };
 
-    // Step 11.2: Create the PayPal payment session
-    paypal.payment.create(create_payment_json, async (error, payment) => {
-      if (error) {
-        console.error("PayPal error:", error); // Log PayPal error
-        return next(new ErrorHandler("Payment creation failed", 500));
-      }
+    //! 1) initiate the paypal order
+    paypal.payment.create(create_payment_json, async (err, payment) => {
+      if (err) return next(new ErrorHandler("Payment Failed", 500));
+      console.log(payment.id);
 
-      try {
-        // Step 11.3: Get the approval URL from PayPal response to redirect user
-        const approvalLink = payment.links.find((link) => link.rel === "approval_url")?.href;
+      //~ send a approval link for paypal payment
+      const approvalLink = payment.links.find((link) => link.rel === "approval_url").href;
+      // console.log(approvalLink);
 
-        if (!approvalLink) {
-          return next(new ErrorHandler("Approval link not received", 500));
-        }
-
-        // Step 11.4: Now create the order in DB with status pending
-        const order = await orderCollection.create({
-          userId,
-          cartId,
-          cartItems,
-          addressInfo,
-          paymentMethod,
-          totalAmount,
-          paymentId: payment.id, // Save PayPal payment ID
-          paymentStatus: "Pending", // Payment is not yet done
-          orderStatus: "Pending", // Delivery has not started
-        });
-
-        // Step 11.5: Send success response with PayPal payment approval link
-        return new ApiResponse(true, "Order created successfully", {
-          orderId: order._id,
-          paymentLink: approvalLink, // Frontend will redirect user to this link
-        }).send(res);
-      } catch (dbError) {
-        console.error("Order creation failed:", dbError);
-        return next(new ErrorHandler("Order save failed after payment creation", 500));
-      }
-    });
-  }
-
-  // ✅ Step 12: Handle COD (Cash On Delivery) flow
-  else {
-    try {
-      // Create the order directly in the database (no PayPal needed)
-      const order = await orderCollection.create({
+      await orderCollection.create({
+        paymentId: payment.id,
         userId,
         cartId,
         cartItems,
         addressInfo,
         paymentMethod,
         totalAmount,
-        orderStatus: "Pending", // Delivery will be done later
-        paymentStatus: "Pending", // Cash will be collected at time of delivery
       });
 
-      // Return success response to frontend
-      return new ApiResponse(true, "Order placed successfully (COD)", {
-        orderId: order._id,
-      }).send(res);
-    } catch (err) {
-      return next(new ErrorHandler("COD order creation failed", 500));
-    }
+      new ApiResponse(201, true, "Order created successfully", approvalLink).send(res);
+    });
   }
+  //~ If payment method is COD
+  else {
+    const newOrder = await orderCollection.create({
+      userId,
+      cartId,
+      cartItems,
+      addressInfo,
+      paymentMethod,
+      totalAmount,
+    });
+    new ApiResponse(201, true, "Order created successfully", newOrder).send(res);
+  }
+});
+
+const capturePayment = expressAsyncHandler(async (req, res, next) => {
+  console.log(req.query);
+  const paymentId = req.query.paymentId;
+  const payerId = req.query.PayerID;
+
+  paypal.payment.execute(paymentId, { payer_id: payerId }, async (err, payment) => {
+    console.log(err);
+    if (err) return next(new ErrorHandler("Payment Failed", 500));
+
+    // console.log(payment);
+    let order = await orderCollection.findOne({ paymentId });
+    console.log(order);
+
+    if (payment.state === "approved") {
+      order.orderStatus = "placed";
+      order.paymentStatus = "paid";
+      order.payerId = payerId;
+      await order.save();
+
+      new ApiResponse(200, true, "Payment captured successfully", order).send(res);
+    } else {
+      order.status = "cancelled";
+      order.paymentStatus = "failed";
+      order.payerId = payerId;
+      await order.save();
+      new ApiResponse(200, true, "Payment failed", order).send(res);
+    }
+  });
+});
+
+const getOrders = expressAsyncHandler(async (req, res, next) => {
+  const userId = req.user._id;
+  const orders = await orderCollection.find({ userId });
+  if (orders.length === 0) return next(new ErrorHandler("No orders found", 404));
+  new ApiResponse(true, "Orders fetched successfully", orders, 200).send(res);
+});
+
+const getOrder = expressAsyncHandler(async (req, res, next) => {
+  const orderId = req.params.id;
+  const userId = req.user._id;
+
+  const order = await orderCollection.findOne({ _id: orderId, userId });
+  if (!order) return next(new ErrorHandler("Order not found", 404));
+
+  new ApiResponse(true, "Order fetched successfully", order, 200).send(res);
 });
 
 module.exports = {
   createOrder,
+  capturePayment,
+  getOrders,
+  getOrder,
 };
+// PAYID-NCE6UPA67T997029E544672F
+// http://localhost:9000/api/v1/shop/orders/capture-payment?paymentId=PAYID-NCE6UPA67T997029E544672F&token=EC-3J282401CH949013L&PayerID=E8J6GABAN2B7A
