@@ -139,8 +139,11 @@ const createOrder = expressAsyncHandler(async (req, res, next) => {
   }
 });
 
+//! http://localhost:9000/api/v1/shop/orders/capture-payment?paymentId=PAYID-NCE6VTA8K212113UM6454648&token=EC-2GS68758TV440830J&PayerID=E8J6GABAN2B7A
+
 const capturePayment = expressAsyncHandler(async (req, res, next) => {
   console.log(req.query);
+  let userId = req.user._id;
   const paymentId = req.query.paymentId;
   const payerId = req.query.PayerID;
 
@@ -157,6 +160,18 @@ const capturePayment = expressAsyncHandler(async (req, res, next) => {
       order.paymentStatus = "paid";
       order.payerId = payerId;
       await order.save();
+
+      //! stock
+      let cart = await cartCollection.findOne({ userId });
+      cart.items.map(async (item) => {
+        await productCollection.updateOne(
+          { _id: item.productId },
+          { $inc: { totalStock: -item.quantity } }
+        );
+      });
+      //! cart
+      cart.items = [];
+      await cart.save();
 
       new ApiResponse(200, true, "Payment captured successfully", order).send(res);
     } else {
